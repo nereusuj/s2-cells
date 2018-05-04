@@ -83,7 +83,7 @@ function wrapper(plugin_info)
         "Light Cell<div><input type='text' id='light-cell' value='" + lightCell + "'/></div>" + 
         "Dark Cell<div><input type='text' id='dark-cell' value='" + darkCell + "'/></div></div>" +
         "<div>Note if your choices would cause too many cells to be rendered, we will try not to display them.</div>" +
-        "<div>See the <a href='https://github.com/nikolawannabe/s2-cells/blob/master/cell-guidelines.md'>Cell Guidelines</a>" +  
+        "<div>See the <a href='https://github.com/nikolawannabe/s2-cells/blob/master/cell-guidelines.md'>Cell Guidelines</a> " +  
         "for hints on what these numbers can be used for.</div>"
   ;
     var d =
