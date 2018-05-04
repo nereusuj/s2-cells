@@ -1,7 +1,7 @@
 // ==UserScript==
 // @id             iitc-plugin-l17cells@vib
 // @name           IITC plugin: Show S2 Level 17 Cells
-// @author         vib
+// @author         vib+nikolawannabe
 // @category       Layer
 // @version        0.1.7
 // @namespace      https://github.com/vibrunazo/l17cells
