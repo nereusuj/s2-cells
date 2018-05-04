@@ -1,6 +1,6 @@
 # s2-cells
 
-This plugin will allow you to visualize [s2 cells](https://pokemongohub.net/post/article/comprehensive-guide-s2-cells-pokemon-go/) on top of IITC.  You can set two different configurable levels, one which is shown
+This plugin will allow you to visualize [s2 cells](https://pokemongohub.net/post/article/comprehensive-guide-s2-cells-pokemon-go/) on top of [IITC](iitc.me).  You can set two different configurable levels, one which is shown
 on the map in a light color (should be higher cell number), and one which is marked in a darker color (should be lower). 
 
 It's ok to set them both to the same.
@@ -19,4 +19,4 @@ With thanks and credit to all who have come before, including original l17 plugi
 
 ![Visualization](https://github.com/nikolawannabe/s2-cells/blob/master/s2-cells.png?raw=true)
 
-[Install Current Version to Tampermonkey](https://github.com/nikolawannabe/s2-cells/raw/master/s2-cells.user.js)
+[Install Current Version to IITC](https://github.com/nikolawannabe/s2-cells/raw/master/s2-cells.user.js)
