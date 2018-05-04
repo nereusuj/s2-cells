@@ -3,7 +3,7 @@
 // @name           IITC plugin: Show Configurable S2 Cells
 // @author         vib+	Dragonsangel+nikolawannabe
 // @category       Layer
-// @version        0.1.9
+// @version        0.1.10
 // @namespace      https://github.com/nikolawannabe/s2-cells
 // @updateURL      https://raw.githubusercontent.com/nikolawannabe/s2-cells/master/s2-cells.meta.js
 // @downloadURL    https://github.com/nikolawannabe/s2-cells/raw/master/s2-cells.user.js
@@ -42,7 +42,7 @@ function wrapper(plugin_info)
   // SET THIS TO TRUE WHILE DEBUGGING
   window.plugin.showcells.debug = false;
 
-  window.plugin.showcells.storage = { cellLevel: 17 };
+  window.plugin.showcells.storage = { cellLevel: 17, lightCell: 17, darkCell: 14 };
   window.plugin.showcells.storageKey = 'showcells-storage';
 
   // update the localStorage datas
