@@ -15,4 +15,8 @@ This info is based largely on info from Reddit's [TheSilphRoad](https://www.redd
 
 With thanks and credit to all who have come before, including original l17 plugin submitter [vibrunazo](https://github.com/vibrunazo) and quality PR by [Dragonsangel](https://github.com/Dragonsangel).
 
+![Configuration](https://github.com/nikolawannabe/s2-cells/blob/master/config.png?raw=true)
+
+![Visualization](https://github.com/nikolawannabe/s2-cells/blob/master/s2-cells.png?raw=true)
+
 [Install Current Version to Tampermonkey](https://github.com/nikolawannabe/s2-cells/raw/master/s2-cells.user.js)
