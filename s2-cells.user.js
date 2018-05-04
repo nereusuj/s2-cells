@@ -1,13 +1,13 @@
 // ==UserScript==
-// @id             iitc-plugin-l17cells@vib
-// @name           IITC plugin: Show S2 Level 17 Cells
-// @author         vib+nikolawannabe
+// @id             iitc-plugin-s2-cells@vib
+// @name           IITC plugin: Show Configurable S2 Cells
+// @author         vib+	Dragonsangel+nikolawannabe
 // @category       Layer
-// @version        0.1.7
-// @namespace      https://github.com/vibrunazo/l17cells
-// @updateURL      https://raw.githubusercontent.com/vibrunazo/l17cells/master/l17cells.meta.js
-// @downloadURL    https://raw.githubusercontent.com/vibrunazo/l17cells/master/l17cells.user.js
-// @description    IITC: Shows S2 level 17 cells on the map
+// @version        0.1.8
+// @namespace      https://github.com/nikolawannabe/s2-cells
+// @updateURL      https://raw.githubusercontent.com/nikolawannabe/s2-cells/master/s2-cells.meta.js
+// @downloadURL    https://github.com/nikolawannabe/s2-cells/raw/master/s2-cells.user.js
+// @description    IITC: Shows configurable S2 level cells on the map
 // @include        https://*.ingress.com/intel*
 // @include        http://*.ingress.com/intel*
 // @match          https://*.ingress.com/intel*
@@ -721,14 +721,45 @@ function wrapper(plugin_info)
 
     // centre cell
     var zoom = map.getZoom();
-    var maxzoom = 5; // Not 16?
-    //if (window.plugin.showcells.storage.smallCell <= 14) maxzoom = 10;
-    //if (window.plugin.showcells.storage.smallCell <= 8) maxzoom = 5;
+    
+    var darkCell = window.plugin.showcells.storage.darkCell;
+    var lightCell = window.plugin.showcells.storage.lightCell;
+    var maxzoom = 5;
+    var greaterCell = 0;
+    if (darkCell > lightCell) {
+      greaterCell = darkCell;
+    } else {
+      greaterCell = lightCell;
+      
+    }
+    
+    //FIXME:  This works great with my screen resolution, but may not for others! Needs to be
+    //calculated, but I am too lazy.
+    if (greaterCell > 10 && greaterCell < 11) {
+      maxzoom  = 6;
+    }
+   
+    if (greaterCell > 10 && greaterCell < 13) {
+      maxzoom  = 10;
+    }
+    
+    if (greaterCell > 12 && greaterCell < 16) {
+      maxzoom  = 12;
+    }
+    
+    if (greaterCell > 15 && greaterCell < 18) {
+      maxzoom  = 15;
+    }
+   
+    if (greaterCell > 17 && greaterCell < 20) {
+      maxzoom  = 18;
+      
+    }
+    console.log("Set maxzoom to " + maxzoom +", greater cell is " + greaterCell + " and zoom is " + zoom + ".");
+   
     if (zoom >= maxzoom)
     { 
       //var cellSize = window.plugin.showcells.storage.cellLevel;
-      var darkCell = window.plugin.showcells.storage.darkCell;
-      var lightCell = window.plugin.showcells.storage.lightCell;
       var cellStop = S2.S2Cell.FromLatLng(map.getCenter(), lightCell);
       var cellGym = S2.S2Cell.FromLatLng(map.getCenter(), darkCell);
 
