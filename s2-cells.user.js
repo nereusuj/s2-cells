@@ -29,9 +29,9 @@ function wrapper(plugin_info)
 
   //PLUGIN AUTHORS: writing a plugin outside of the IITC build environment? if so, delete these lines!!
   //(leaving them in place might break the 'About IITC' page or break update checks)
-  plugin_info.buildName = 'l17cells';
-  plugin_info.dateTimeVersion = '20170110.010106';
-  plugin_info.pluginId = 'l17cells';
+  plugin_info.buildName = 's2-cells';
+  plugin_info.dateTimeVersion = '20180504.121800';
+  plugin_info.pluginId = 's2-cells';
   //END PLUGIN AUTHORS NOTE
 
   // PLUGIN START ////////////////////////////////////////////////////////
