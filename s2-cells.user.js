@@ -3,7 +3,7 @@
 // @name           IITC plugin: Show Configurable S2 Cells
 // @author         vib+	Dragonsangel+nikolawannabe
 // @category       Layer
-// @version        0.1.8
+// @version        0.1.9
 // @namespace      https://github.com/nikolawannabe/s2-cells
 // @updateURL      https://raw.githubusercontent.com/nikolawannabe/s2-cells/master/s2-cells.meta.js
 // @downloadURL    https://github.com/nikolawannabe/s2-cells/raw/master/s2-cells.user.js
@@ -81,7 +81,11 @@ function wrapper(plugin_info)
     var dialogHtml = 
         "<div id='cell-levels-dialog'>" +
         "Light Cell<div><input type='text' id='light-cell' value='" + lightCell + "'/></div>" + 
-        "Dark Cell<div><input type='text' id='dark-cell' value='" + darkCell + "'/></div></div>";
+        "Dark Cell<div><input type='text' id='dark-cell' value='" + darkCell + "'/></div></div>" +
+        "<div>Note if your choices would cause too many cells to be rendered, we will try not to display them.</div>" +
+        "<div>See the <a href='https://github.com/nikolawannabe/s2-cells/blob/master/cell-guidelines.md'>Cell Guidelines</a>" +  
+        "for hints on what these numbers can be used for.</div>"
+  ;
     var d =
     dialog({
         title: "Set Cell Levels",
