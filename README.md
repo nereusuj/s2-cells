@@ -11,3 +11,5 @@ will try and determine this and not display either of them.
 This is just an initial attempt and could still use a lot of work, though I consider it functional and useful at this time.
 
 You can learn more about [Cell Levels](https://github.com/nikolawannabe/s2-cells/blob/master/cell-guidelines.md) if you want.
+
+[Install Current Version to Tampermonkey](https://github.com/nikolawannabe/s2-cells/raw/master/s2-cells.user.js)
