@@ -3,7 +3,7 @@
 // @name           IITC plugin: Show S2 Level 17 Cells
 // @author         vib
 // @category       Layer
-// @version        0.1.6
+// @version        0.1.7
 // @namespace      https://github.com/vibrunazo/l17cells
 // @updateURL      https://raw.githubusercontent.com/vibrunazo/l17cells/master/l17cells.meta.js
 // @downloadURL    https://raw.githubusercontent.com/vibrunazo/l17cells/master/l17cells.user.js
@@ -68,23 +68,47 @@ function wrapper(plugin_info)
 
   window.plugin.showcells.setCellLevel = function()
   {
-    var newCellLevel = prompt("Set a cell level", window.plugin.showcells.storage.cellLevel);
-    newCellLevel = parseInt(newCellLevel, 10);
-    if (window.plugin.showcells.debug)
-    {
-      console.log("new cell=" + newCellLevel);
-    }
-    if (newCellLevel !== isNaN && newCellLevel >= 2 && newCellLevel <= 20)
-    {
-      //alert("Valid cell value");
-      window.plugin.showcells.storage.cellLevel = newCellLevel;
-      window.plugin.showcells.saveStorage();
-      window.plugin.showcells.update();
-    }
-    else
-    {
-      alert("Invalid cell value. Must be a number between 2 and 20");
-    }
+    window.plugin.showcells.loadStorage();
+    var lightCell = window.plugin.showcells.storage.lightCell;
+    var darkCell = window.plugin.showcells.storage.darkCell;
+    if (lightCell == isNaN || darkCell == isNaN) {
+        window.plugin.showcells.storage.lightCell = 17;
+        lightCell = 17;
+        window.plugin.showcells.storage.darkCell = 14;
+        darkCell = 14;
+        window.plugin.showcells.saveStorage();
+    } 
+    var dialogHtml = 
+        "<div id='cell-levels-dialog'>" +
+        "Light Cell<div><input type='text' id='light-cell' value='" + lightCell + "'/></div>" + 
+        "Dark Cell<div><input type='text' id='dark-cell' value='" + darkCell + "'/></div></div>";
+    var d =
+    dialog({
+        title: "Set Cell Levels",
+        html: dialogHtml,
+        width:'auto',
+        buttons:{
+          'Save': function() {
+                var darkCell = parseInt($("#dark-cell").val(), 10);
+                var lightCell = parseInt($("#light-cell").val(), 10);
+               
+                if (lightCell !== isNaN && darkCell !== isNaN  &&
+                   lightCell >= 2 && lightCell < 21 &&
+                   darkCell >= 2 && darkCell < 21)
+                {
+                    window.plugin.showcells.storage.darkCell = darkCell;
+                    window.plugin.showcells.storage.lightCell = lightCell;
+                    window.plugin.showcells.saveStorage();
+                    window.plugin.showcells.update();
+                } 
+                else
+                {
+                  alert("Invalid value(s). Cell levels must be numbers between 2 and 20");
+                }
+            }
+        }
+    });
+  
   };
 
   window.plugin.showcells.setup = function()
@@ -667,7 +691,7 @@ function wrapper(plugin_info)
     var bounds = map.getBounds();
     var seenCells = {};
 
-    var drawCellAndNeighbors = function(cell)
+    var drawCellAndNeighbors = function(cell, color)
     {
       var cellStr = cell.toString();
 
@@ -683,13 +707,13 @@ function wrapper(plugin_info)
         if (cellBounds.intersects(bounds))
         {
           // on screen - draw it
-          window.plugin.showcells.drawCell(cell);
+          window.plugin.showcells.drawCell(cell, color);
 
           // and recurse to our neighbors
           var neighbors = cell.getNeighbors();
           for (var i = 0; i < neighbors.length; i++)
           {
-            drawCellAndNeighbors(neighbors[i]);
+            drawCellAndNeighbors(neighbors[i], color);
           }
         }
       }
@@ -697,19 +721,23 @@ function wrapper(plugin_info)
 
     // centre cell
     var zoom = map.getZoom();
-    var maxzoom = 16;
-    if (window.plugin.showcells.storage.cellLevel <= 14) maxzoom = 10;
-    if (window.plugin.showcells.storage.cellLevel <= 8) maxzoom = 5;
+    var maxzoom = 5; // Not 16?
+    //if (window.plugin.showcells.storage.smallCell <= 14) maxzoom = 10;
+    //if (window.plugin.showcells.storage.smallCell <= 8) maxzoom = 5;
     if (zoom >= maxzoom)
-    { // 5 // ;;;;
-      // var cellSize = zoom>=7 ? 6 : 4;  // ;;;;vib
-      var cellSize = window.plugin.showcells.storage.cellLevel;
-      var cell = S2.S2Cell.FromLatLng(map.getCenter(), cellSize);
+    { 
+      //var cellSize = window.plugin.showcells.storage.cellLevel;
+      var darkCell = window.plugin.showcells.storage.darkCell;
+      var lightCell = window.plugin.showcells.storage.lightCell;
+      var cellStop = S2.S2Cell.FromLatLng(map.getCenter(), lightCell);
+      var cellGym = S2.S2Cell.FromLatLng(map.getCenter(), darkCell);
 
-      drawCellAndNeighbors(cell);
+
+      //var color = cell.level == 6 ? 'gold' : 'orange';
+      drawCellAndNeighbors(cellStop, 'MintCream');
+      drawCellAndNeighbors(cellGym, 'MediumSeaGreen	');
     }
-
-
+    
     // the six cube side boundaries. we cheat by hard-coding the coords as it's simple enough
     var latLngs = [
       [45, -180],
@@ -753,7 +781,7 @@ function wrapper(plugin_info)
     }
   }
 
-  window.plugin.showcells.drawCell = function(cell)
+  window.plugin.showcells.drawCell = function(cell, color)
   {
     //TODO: move to function - then call for all cells on screen
 
@@ -765,8 +793,6 @@ function wrapper(plugin_info)
 
     // name
     var name = window.plugin.showcells.regionName(cell);
-
-    var color = cell.level == 6 ? 'gold' : 'orange';
 
     // the level 6 cells have noticible errors with non-geodesic lines - and the larger level 4 cells are worse
     // NOTE: we only draw two of the edges. as we draw all cells on screen, the other two edges will either be drawn
