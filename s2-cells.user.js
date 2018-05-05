@@ -3,7 +3,7 @@
 // @name           IITC plugin: Show Configurable S2 Cells
 // @author         vib+	Dragonsangel+nikolawannabe
 // @category       Layer
-// @version        0.1.10
+// @version        0.1.11
 // @namespace      https://github.com/nikolawannabe/s2-cells
 // @updateURL      https://raw.githubusercontent.com/nikolawannabe/s2-cells/master/s2-cells.meta.js
 // @downloadURL    https://github.com/nikolawannabe/s2-cells/raw/master/s2-cells.user.js
@@ -42,7 +42,7 @@ function wrapper(plugin_info)
   // SET THIS TO TRUE WHILE DEBUGGING
   window.plugin.showcells.debug = false;
 
-  window.plugin.showcells.storage = { cellLevel: 17, lightCell: 17, darkCell: 14 };
+  window.plugin.showcells.storage = { lightCell: 17, darkCell: 14, lightColor: '#f5fffa', darkColor: '#3cb371'};
   window.plugin.showcells.storageKey = 'showcells-storage';
 
   // update the localStorage datas
@@ -58,12 +58,6 @@ function wrapper(plugin_info)
     {
       window.plugin.showcells.storage = JSON.parse(localStorage[window.plugin.showcells.storageKey]);
     }
-
-    //ensure default values are always set
-    if (typeof window.plugin.showcells.storage.cellLevel == "undefined")
-    {
-      window.plugin.showcells.storage.cellLevel = 17;
-    }
   };
 
   window.plugin.showcells.setCellLevel = function()
@@ -71,6 +65,8 @@ function wrapper(plugin_info)
     window.plugin.showcells.loadStorage();
     var lightCell = window.plugin.showcells.storage.lightCell;
     var darkCell = window.plugin.showcells.storage.darkCell;
+    var lightColor = window.plugin.showcells.storage.lightColor;
+    var darkColor = window.plugin.showcells.storage.darkColor;
     if (lightCell == isNaN || darkCell == isNaN) {
         window.plugin.showcells.storage.lightCell = 17;
         lightCell = 17;
@@ -80,11 +76,15 @@ function wrapper(plugin_info)
     } 
     var dialogHtml = 
         "<div id='cell-levels-dialog'>" +
-        "Light Cell<div><input type='text' id='light-cell' value='" + lightCell + "'/></div>" + 
-        "Dark Cell<div><input type='text' id='dark-cell' value='" + darkCell + "'/></div></div>" +
-        "<div>Note if your choices would cause too many cells to be rendered, we will try not to display them.</div>" +
+        "Inner Cells<div><input type='text' id='light-cell' value='" + lightCell + "'/> " + 
+          "Color: <input type='color' id='light-color' value='" + lightColor + "'/>" +
+          "</div>" + 
+        "Outer Cells<div><input type='text' id='dark-cell' value='" + darkCell + "'/> " + 
+          "Color: <input type='color' id='dark-color' value='" + darkColor + "'/>" +
+          "</div>" +
+        "<div>Note that if your choices would cause too many cells to be rendered, we will try not to display them.</div>" +
         "<div>See the <a href='https://github.com/nikolawannabe/s2-cells/blob/master/cell-guidelines.md'>Cell Guidelines</a> " +  
-        "for hints on what these numbers can be used for.</div>"
+        "for tips on what these numbers can be used for.</div>"
   ;
     var d =
     dialog({
@@ -92,9 +92,19 @@ function wrapper(plugin_info)
         html: dialogHtml,
         width:'auto',
         buttons:{
+          'Reset to Defaults': function() {
+                window.plugin.showcells.storage = { lightCell: 17, darkCell: 14, lightColor: '#f5fffa', darkColor: '#3cb371'};
+                window.plugin.showcells.saveStorage();
+                window.plugin.showcells.update();
+                return;
+          },
           'Save': function() {
                 var darkCell = parseInt($("#dark-cell").val(), 10);
                 var lightCell = parseInt($("#light-cell").val(), 10);
+                var darkColor = $("#dark-color").val();
+                var lightColor = $("#light-color").val();
+                console.log("light color: " + lightColor);
+                console.log("dark color: " + darkColor);
                
                 if (lightCell !== isNaN && darkCell !== isNaN  &&
                    lightCell >= 2 && lightCell < 21 &&
@@ -102,6 +112,9 @@ function wrapper(plugin_info)
                 {
                     window.plugin.showcells.storage.darkCell = darkCell;
                     window.plugin.showcells.storage.lightCell = lightCell;
+                    window.plugin.showcells.storage.lightColor = lightColor;
+                    window.plugin.showcells.storage.darkColor = darkColor;
+                  
                     window.plugin.showcells.saveStorage();
                     window.plugin.showcells.update();
                 } 
@@ -109,6 +122,7 @@ function wrapper(plugin_info)
                 {
                   alert("Invalid value(s). Cell levels must be numbers between 2 and 20");
                 }
+                return;
             }
         }
     });
@@ -728,13 +742,14 @@ function wrapper(plugin_info)
     
     var darkCell = window.plugin.showcells.storage.darkCell;
     var lightCell = window.plugin.showcells.storage.lightCell;
+    var lightColor = window.plugin.showcells.storage.lightColor;
+    var darkColor = window.plugin.showcells.storage.darkColor;
     var maxzoom = 5;
     var greaterCell = 0;
     if (darkCell > lightCell) {
       greaterCell = darkCell;
     } else {
       greaterCell = lightCell;
-      
     }
     
     //FIXME:  This works great with my screen resolution, but may not for others! Needs to be
@@ -763,14 +778,11 @@ function wrapper(plugin_info)
    
     if (zoom >= maxzoom)
     { 
-      //var cellSize = window.plugin.showcells.storage.cellLevel;
       var cellStop = S2.S2Cell.FromLatLng(map.getCenter(), lightCell);
       var cellGym = S2.S2Cell.FromLatLng(map.getCenter(), darkCell);
-
-
-      //var color = cell.level == 6 ? 'gold' : 'orange';
-      drawCellAndNeighbors(cellStop, 'MintCream');
-      drawCellAndNeighbors(cellGym, 'MediumSeaGreen	');
+      
+      drawCellAndNeighbors(cellStop, lightColor);
+      drawCellAndNeighbors(cellGym, darkColor);
     }
     
     // the six cube side boundaries. we cheat by hard-coding the coords as it's simple enough
