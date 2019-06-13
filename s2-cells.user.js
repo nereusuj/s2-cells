@@ -42,7 +42,7 @@ function wrapper(plugin_info)
   // SET THIS TO TRUE WHILE DEBUGGING
   window.plugin.showcells.debug = false;
 
-  window.plugin.showcells.storage = { lightCell: 17, darkCell: 14, lightColor: '#f5fffa', darkColor: '#3cb371'};
+  window.plugin.showcells.storage = { lightCell: 17, darkCell: 14, lightColor: '#f5fffa', darkColor: '#3cb371', lightWidth: 1, darkWidth: 8};
   window.plugin.showcells.storageKey = 'showcells-storage';
 
   // update the localStorage datas
@@ -67,20 +67,31 @@ function wrapper(plugin_info)
     var darkCell = window.plugin.showcells.storage.darkCell;
     var lightColor = window.plugin.showcells.storage.lightColor;
     var darkColor = window.plugin.showcells.storage.darkColor;
+    var lightWidth = window.plugin.showcells.storage.lightWidth;
+    var darkWidth = window.plugin.showcells.storage.darkWidth;
     if (lightCell == isNaN || darkCell == isNaN) {
         window.plugin.showcells.storage.lightCell = 17;
         lightCell = 17;
         window.plugin.showcells.storage.darkCell = 14;
         darkCell = 14;
         window.plugin.showcells.saveStorage();
-    } 
+    }
+    if (lightWidth == isNaN || darkWidth == isNaN) {
+        window.plugin.showcells.storage.lightWidth = 1;
+        lightWidth = 1;
+        window.plugin.showcells.storage.darkWidth = 8;
+        darkWidth = 8;
+        window.plugin.showcells.saveStorage();
+    }
     var dialogHtml = 
         "<div id='cell-levels-dialog'>" +
         "Inner Cells<div><input type='text' id='light-cell' value='" + lightCell + "'/> " + 
           "Color: <input type='color' id='light-color' value='" + lightColor + "'/>" +
-          "</div>" + 
+          "Width: <input type='text' id='light-width' value='" + lightWidth + "'/>" +
+        "</div>" +
         "Outer Cells<div><input type='text' id='dark-cell' value='" + darkCell + "'/> " + 
           "Color: <input type='color' id='dark-color' value='" + darkColor + "'/>" +
+          "Width: <input type='text' id='dark-width' value='" + darkWidth + "'/>" +
           "</div>" +
         "<div>Note that if your choices would cause too many cells to be rendered, we will try not to display them.</div>" +
         "<div>See the <a href='https://github.com/nikolawannabe/s2-cells/blob/master/cell-guidelines.md'>Cell Guidelines</a> " +  
@@ -93,7 +104,7 @@ function wrapper(plugin_info)
         width:'auto',
         buttons:{
           'Reset to Defaults': function() {
-                window.plugin.showcells.storage = { lightCell: 17, darkCell: 14, lightColor: '#f5fffa', darkColor: '#3cb371'};
+                window.plugin.showcells.storage = { lightCell: 17, darkCell: 14, lightColor: '#f5fffa', darkColor: '#3cb371', lightWidth: 1, darkWidth: 8};
                 window.plugin.showcells.saveStorage();
                 window.plugin.showcells.update();
                 return;
@@ -103,6 +114,8 @@ function wrapper(plugin_info)
                 var lightCell = parseInt($("#light-cell").val(), 10);
                 var darkColor = $("#dark-color").val();
                 var lightColor = $("#light-color").val();
+                var lightWidth = parseInt($("#light-width").val(), 10);
+                var darkWidth = parseInt($("#dark-width").val(), 10);
                 console.log("light color: " + lightColor);
                 console.log("dark color: " + darkColor);
                
@@ -114,6 +127,8 @@ function wrapper(plugin_info)
                     window.plugin.showcells.storage.lightCell = lightCell;
                     window.plugin.showcells.storage.lightColor = lightColor;
                     window.plugin.showcells.storage.darkColor = darkColor;
+                    window.plugin.showcells.storage.lightWidth = lightWidth;
+                    window.plugin.showcells.storage.darkWidth = darkWidth;
                   
                     window.plugin.showcells.saveStorage();
                     window.plugin.showcells.update();
@@ -709,7 +724,7 @@ function wrapper(plugin_info)
     var bounds = map.getBounds();
     var seenCells = {};
 
-    var drawCellAndNeighbors = function(cell, color)
+    var drawCellAndNeighbors = function(cell, color, selectedWeight)
     {
       var cellStr = cell.toString();
 
@@ -725,13 +740,13 @@ function wrapper(plugin_info)
         if (cellBounds.intersects(bounds))
         {
           // on screen - draw it
-          window.plugin.showcells.drawCell(cell, color);
+          window.plugin.showcells.drawCell(cell, color, selectedWeight);
 
           // and recurse to our neighbors
           var neighbors = cell.getNeighbors();
           for (var i = 0; i < neighbors.length; i++)
           {
-            drawCellAndNeighbors(neighbors[i], color);
+            drawCellAndNeighbors(neighbors[i], color, selectedWeight);
           }
         }
       }
@@ -744,6 +759,8 @@ function wrapper(plugin_info)
     var lightCell = window.plugin.showcells.storage.lightCell;
     var lightColor = window.plugin.showcells.storage.lightColor;
     var darkColor = window.plugin.showcells.storage.darkColor;
+    var darkCellWidth = window.plugin.showcells.storage.darkWidth;
+    var lightCellWidth = window.plugin.showcells.storage.lightWidth;
     var maxzoom = 5;
     var greaterCell = 0;
     if (darkCell > lightCell) {
@@ -781,8 +798,8 @@ function wrapper(plugin_info)
       var cellStop = S2.S2Cell.FromLatLng(map.getCenter(), lightCell);
       var cellGym = S2.S2Cell.FromLatLng(map.getCenter(), darkCell);
       
-      drawCellAndNeighbors(cellStop, lightColor);
-      drawCellAndNeighbors(cellGym, darkColor);
+      drawCellAndNeighbors(cellStop, lightColor, lightCellWidth);
+      drawCellAndNeighbors(cellGym, darkColor, darkCellWidth );
     }
     
     // the six cube side boundaries. we cheat by hard-coding the coords as it's simple enough
@@ -828,7 +845,7 @@ function wrapper(plugin_info)
     }
   }
 
-  window.plugin.showcells.drawCell = function(cell, color)
+  window.plugin.showcells.drawCell = function(cell, color, selectedWeight)
   {
     //TODO: move to function - then call for all cells on screen
 
@@ -849,7 +866,7 @@ function wrapper(plugin_info)
       fill: false,
       color: color,
       opacity: 0.5,
-      weight: 5,
+      weight: selectedWeight,
       clickable: false
     });
 
