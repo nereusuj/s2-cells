@@ -3,10 +3,10 @@
 // @name           IITC plugin: Show Configurable S2 Cells
 // @author         vib+	Dragonsangel+nikolawannabe
 // @category       Layer
-// @version        0.1.11
+// @version        0.1.11.1
 // @namespace      https://github.com/nikolawannabe/s2-cells
-// @updateURL      https://raw.githubusercontent.com/nikolawannabe/s2-cells/master/s2-cells.meta.js
-// @downloadURL    https://github.com/nikolawannabe/s2-cells/raw/master/s2-cells.user.js
+// @updateURL      https://github.com/nereusuj/s2-cells/raw/master/s2-cells.meta.js
+// @downloadURL    https://github.com/nereusuj/s2-cells/raw/master/s2-cells.user.js
 // @description    IITC: Shows configurable S2 level cells on the map
 // @include        https://*.ingress.com/intel*
 // @include        http://*.ingress.com/intel*
@@ -42,7 +42,7 @@ function wrapper(plugin_info)
   // SET THIS TO TRUE WHILE DEBUGGING
   window.plugin.showcells.debug = false;
 
-  window.plugin.showcells.storage = { lightCell: 17, darkCell: 14, lightColor: '#f5fffa', darkColor: '#3cb371', lightWidth: 1, darkWidth: 8};
+  window.plugin.showcells.storage = { lightCell: 17, darkCell: 14, lightColor: '#ffff00', darkColor: '#ff0000', lightWidth: 1, darkWidth: 3};
   window.plugin.showcells.storageKey = 'showcells-storage';
 
   // update the localStorage datas
