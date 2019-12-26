@@ -3,10 +3,10 @@
 // @name           IITC plugin: Show Configurable S2 Cells
 // @author         vib+	Dragonsangel+nikolawannabe
 // @category       Layer
-// @version        0.1.11
-// @namespace      https://github.com/nikolawannabe/s2-cells
-// @updateURL      https://raw.githubusercontent.com/nikolawannabe/s2-cells/master/s2-cells.meta.js
-// @downloadURL    https://github.com/nikolawannabe/s2-cells/raw/master/s2-cells.user.js
+// @version        0.1.11.2
+// @namespace      https://github.com/nereusuj/s2-cells
+// @updateURL      https://github.com/nereusuj/s2-cells/raw/master/s2-cells.meta.js
+// @downloadURL    https://github.com/nereusuj/s2-cells/raw/master/s2-cells.user.js
 // @description    IITC: Shows configurable S2 level cells on the map
 // @include        https://*.ingress.com/intel*
 // @include        http://*.ingress.com/intel*
