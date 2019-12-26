@@ -1,5 +1,5 @@
 // ==UserScript==
-// @id             iitc-plugin-s2-cells@vib
+// @id             s2-cells
 // @name           IITC plugin: Show Configurable S2 Cells
 // @author         vib+	Dragonsangel+nikolawannabe
 // @category       Layer
