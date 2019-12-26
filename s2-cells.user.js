@@ -3,7 +3,7 @@
 // @name           IITC plugin: Show Configurable S2 Cells
 // @author         vib+	Dragonsangel+nikolawannabe
 // @category       Layer
-// @version        0.1.11.1
+// @version        0.1.11.2
 // @namespace      https://github.com/nikolawannabe/s2-cells
 // @updateURL      https://github.com/nereusuj/s2-cells/raw/master/s2-cells.meta.js
 // @downloadURL    https://github.com/nereusuj/s2-cells/raw/master/s2-cells.user.js
