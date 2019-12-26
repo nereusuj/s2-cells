@@ -104,7 +104,7 @@ function wrapper(plugin_info)
         width:'auto',
         buttons:{
           'Reset to Defaults': function() {
-                window.plugin.showcells.storage = { lightCell: 17, darkCell: 14, lightColor: '#f5fffa', darkColor: '#3cb371', lightWidth: 1, darkWidth: 8};
+                window.plugin.showcells.storage = { lightCell: 17, darkCell: 14, lightColor: '#ffff00', darkColor: '#ff0000', lightWidth: 1, darkWidth: 3};
                 window.plugin.showcells.saveStorage();
                 window.plugin.showcells.update();
                 return;
